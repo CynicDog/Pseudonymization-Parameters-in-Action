@@ -1,8 +1,10 @@
-import { useState } from "react";
+// App.jsx
+import { useParameter } from "./Context";
 import parameters from "../data/parameters.json";
+import Chart from "./Chart.jsx";
 
-function App() {
-    const [selectedParam, setSelectedParam] = useState(null);
+const App = () => {
+    const { focusedParam, setFocusedParam } = useParameter();
 
     return (
         <div className="container" style={{ marginTop: "10%" }}>
@@ -15,9 +17,14 @@ function App() {
                             <div
                                 key={index}
                                 className={`list-group-item ${
-                                    selectedParam === param.parameter_name ? "active" : ""
+                                    focusedParam?.id === param.parameter_id ? "active" : ""
                                 }`}
-                                onClick={() => setSelectedParam(param.parameter_name)}
+                                onClick={() =>
+                                    setFocusedParam({
+                                        id: param.parameter_id,
+                                        name: param.parameter_name,
+                                    })
+                                }
                                 style={{ cursor: "pointer" }}
                             >
                                 {param.parameter_name}
@@ -30,17 +37,20 @@ function App() {
                 <div className="col-lg-9">
                     <h3>Description</h3>
                     <div className="border p-4">
-                        {selectedParam ? (
-                            <p>
-                                <strong>파라미터:</strong> {selectedParam}
-                                <br />
-                                <strong>설명:</strong>{" "}
-                                {
-                                    parameters.data.find(
-                                        (param) => param.parameter_name === selectedParam
-                                    )?.description
-                                }
-                            </p>
+                        {focusedParam ? (
+                            <>
+                                <p>
+                                    <strong>파라미터:</strong> {focusedParam.name}
+                                    <br />
+                                    <strong>설명:</strong>{" "}
+                                    {
+                                        parameters.data.find(
+                                            (param) => param.parameter_id === focusedParam.id
+                                        )?.description
+                                    }
+                                </p>
+                                <Chart parameter={focusedParam} />
+                            </>
                         ) : (
                             <p>Please select a parameter from the list.</p>
                         )}
@@ -49,6 +59,6 @@ function App() {
             </div>
         </div>
     );
-}
+};
 
 export default App;
