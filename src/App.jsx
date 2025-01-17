@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import parameters from "../data/parameters.json";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [selectedParam, setSelectedParam] = useState(null);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more!
-      </p>
-    </>
-  )
+    return (
+        <div className="container" style={{ marginTop: "10%" }}>
+            <div className="row">
+                {/* Side Section */}
+                <div className="col-lg-3">
+                    <h3>Parameters</h3>
+                    <ul className="list-group">
+                        {parameters.data.map((param, index) => (
+                            <div
+                                key={index}
+                                className={`list-group-item ${
+                                    selectedParam === param.parameter_name ? "active" : ""
+                                }`}
+                                onClick={() => setSelectedParam(param.parameter_name)}
+                                style={{ cursor: "pointer" }}
+                            >
+                                {param.parameter_name}
+                            </div>
+                        ))}
+                    </ul>
+                </div>
+
+                {/* Main Section */}
+                <div className="col-lg-9">
+                    <h3>Description</h3>
+                    <div className="border p-4">
+                        {selectedParam ? (
+                            <p>
+                                <strong>파라미터:</strong> {selectedParam}
+                                <br />
+                                <strong>설명:</strong>{" "}
+                                {
+                                    parameters.data.find(
+                                        (param) => param.parameter_name === selectedParam
+                                    )?.description
+                                }
+                            </p>
+                        ) : (
+                            <p>Please select a parameter from the list.</p>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
 
-export default App
+export default App;
