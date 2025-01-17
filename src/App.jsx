@@ -7,10 +7,16 @@ const App = () => {
     const { focusedParam, setFocusedParam } = useParameter();
 
     return (
-        <div className="container" style={{ marginTop: "10%" }}>
+        <div className="container" style={{
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            marginTop: 0
+        }}>
             <div className="row">
                 {/* Side Section */}
-                <div className="col-lg-3">
+                <div className="col-3">
                     <h3>Parameters</h3>
                     <ul className="list-group">
                         {parameters.data.map((param, index) => (
@@ -23,6 +29,7 @@ const App = () => {
                                     setFocusedParam({
                                         id: param.parameter_id,
                                         name: param.parameter_name,
+                                        value: null
                                     })
                                 }
                                 style={{ cursor: "pointer" }}
@@ -34,7 +41,7 @@ const App = () => {
                 </div>
 
                 {/* Main Section */}
-                <div className="col-lg-9">
+                <div className="col-9">
                     <h3>Description</h3>
                     <div className="border p-4">
                         {focusedParam ? (
