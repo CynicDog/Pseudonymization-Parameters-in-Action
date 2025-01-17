@@ -2,7 +2,7 @@ import { useParameter } from "./Context";
 import EmptyChart from "./charts/EmptyChart.jsx";
 import incomes from "../data/incomes.json";
 
-const Chart = () => {
+const ChartControl = () => {
 
     const { focusedParam } = useParameter();
 
@@ -30,4 +30,4 @@ const Chart = () => {
     );
 };
 
-export default Chart;
+export default ChartControl;

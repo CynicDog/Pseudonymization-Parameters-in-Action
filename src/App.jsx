@@ -1,7 +1,7 @@
 // App.jsx
 import { useParameter } from "./Context";
 import parameters from "../data/parameters.json";
-import Chart from "./Chart.jsx";
+import ChartControl from "./ChartControl.jsx";
 
 const App = () => {
     const { focusedParam, setFocusedParam } = useParameter();
@@ -49,7 +49,7 @@ const App = () => {
                                         )?.description
                                     }
                                 </p>
-                                <Chart parameter={focusedParam} />
+                                <ChartControl parameter={focusedParam} />
                             </>
                         ) : (
                             <p>Please select a parameter from the list.</p>
