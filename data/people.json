@@ -1,0 +1,10 @@
+{
+  "data": [
+    {
+      "name": "John Doe",
+      "phone_number": "+1-555-123-4567",
+      "address": "123 Maple Street, Springfield, IL",
+      "date_of_birth": "1991-07-15"
+    }
+  ]
+}
