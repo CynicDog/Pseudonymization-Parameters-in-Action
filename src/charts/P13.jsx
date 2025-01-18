@@ -26,7 +26,6 @@ const P13 = ({ data }) => {
         const width = svgRef.current.clientWidth - margin.left - margin.right;
         const height = svgRef.current.clientHeight - margin.top - margin.bottom;
 
-
         // x축 스케일 설정 (데이터 값의 최소, 최대 범위).
         // 데이터의 최소값(`d3.min(incomeData)`)부터 최대값까지의 도메인 차트의 시작점(`0`)부터 차트의 끝(`width`)까지 매핑
         const x = d3.scaleLinear()

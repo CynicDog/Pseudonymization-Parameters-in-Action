@@ -1,7 +1,8 @@
 import {useEffect, useState, useRef} from "react";
 import * as d3 from "d3";
+import { applyMRounding } from "../util.js";
 
-const P12 = ({data}) => {
+const P12 = ({ data }) => {
     const [mRoundingValue, setMRoundingValue] = useState(9); // 데이터구간 초기값
     const [isSorted, setIsSorted] = useState(false); // Sort state
     const rawSvgRef = useRef(null); // 원본 데이터 SVG 참조
@@ -10,13 +11,8 @@ const P12 = ({data}) => {
     useEffect(() => {
         let rawData = data.data;
 
-        // MROUND 함수
-        const applyRounding = (value, interval) => {
-            return Math.round(value / interval) * interval; // 데이터를 구간에 맞게 반올림
-        };
-
         // 데이터 변환
-        let transformedData = rawData.map((d) => applyRounding(d, mRoundingValue));
+        let transformedData = rawData.map((d) => applyMRounding(d, mRoundingValue));
 
         // 정렬된 데이터 (Descending)
         if (isSorted) {
