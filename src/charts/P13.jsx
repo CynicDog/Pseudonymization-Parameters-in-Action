@@ -21,7 +21,7 @@ const P13 = ({ data }) => {
         svg.selectAll("*").remove();
 
         // 마진은 차트의 내부 공간을 확보하기 위해 사용
-        const margin = { top: 10, right: 30, bottom: 45, left: 40 };
+        const margin = { top: 10, right: 30, bottom: 65, left: 40 };
         // 차트의 실제 크기 계산 (뷰포트 크기에서 마진을 뺀 값)
         const width = svgRef.current.clientWidth - margin.left - margin.right;
         const height = svgRef.current.clientHeight - margin.top - margin.bottom;
@@ -60,13 +60,31 @@ const P13 = ({ data }) => {
             .call(d3.axisLeft(y));  // y축 그리기
 
         // x축 레이블 추가
-        // 레이블은 x축의 중심에 위치하며, 설명 텍스트로 사용
         svg.append("text")
             .attr("class", "x-axis-label")
-            .attr("x", width / 2)  // x축 중심
-            .attr("y", height + 45)  // x축 아래에 배치
-            .style("text-anchor", "middle")  // 텍스트 중앙 정렬
-            .text("Income");  // x축 레이블 텍스트
+            .attr("x", width / 2)
+            .attr("y", height + 45)
+            .style("text-anchor", "middle")
+            .text("Income");
+
+        // x축 레이블 추가
+        svg.append("text")
+            .attr("class", "x-axis-label")
+            .attr("x", width / 2)
+            .attr("y", height + 65)
+            .style("text-anchor", "middle")
+            .style("font-weight", "lighter")
+            .text(`(binning size of ${binningValue})`);
+
+        // y축 레이블 추가
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left)
+            .attr("x", 0 - (height / 2))
+            .style("text-anchor", "middle")
+            .style("font-weight", "bold")
+            .style("font-size", "14px")
+            .text("Count");
 
         // 히스토그램 막대(rectangles) 그리기
         // 각 막대는 bin 데이터를 기반으로 렌더링
@@ -97,18 +115,20 @@ const P13 = ({ data }) => {
         <div>
             <div className="d-flex py-3">
                 <div className="ms-auto" style={{width: "30%"}}>
-                    <div>
-                        <p><strong>파라미터 값</strong>: <u className="fw-lighter">{binningValue}</u></p>
-                        <input
-                            type="range"
-                            className="form-range"
-                            id="input-range"
-                            min="1000"
-                            max="20000"
-                            step="1000"
-                            value={binningValue}
-                            onChange={handleBinningChange}
-                        />
+                    <div className="d-flex align-content-center mt-3">
+                        <p className="me-3"><strong>파라미터 조정</strong>{' '}</p>
+                        <div className="mb-2">
+                            <input
+                                type="range"
+                                className="form-range"
+                                id="input-range"
+                                min="1000"
+                                max="20000"
+                                step="1000"
+                                value={binningValue}
+                                onChange={handleBinningChange}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

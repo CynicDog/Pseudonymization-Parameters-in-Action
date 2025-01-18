@@ -12,12 +12,12 @@ const App = () => {
                 {/* Side Section */}
                 <div className="col-3 mt-5">
                     <div className="border rounded-3 shadow p-3">
-                        <h3>Parameters</h3>
+                        <span className="fs-2 fw-lighter">Parameters</span>
                         <div>
-                            {parameters.data.map((param, index) => (
+                        {parameters.data.map((param, index) => (
                                 <div
                                     key={index}
-                                    className={`${
+                                    className={`my-1 ${
                                         focusedParam?.id === param.parameter_id ? "fw-bold rounded-3 bg-primary-subtle px-1" : "fw-lighter"
                                     }`}
                                     onClick={() =>
@@ -39,17 +39,13 @@ const App = () => {
                 {/* Main Section */}
                 <div className="col-9 mt-5">
                     <div className="border rounded-3 shadow p-3">
-                        <h3>Description</h3>
+                        <span className="fs-2 fw-lighter">Parameter Description</span>
                         <div className="p-4">
                             {focusedParam ? (
                                 <>
-                                    <div className="d-flex mb-2">
-                                        <strong>파라미터:</strong>
-                                        <span className="fw-lighter ms-2">{focusedParam.name}</span>
-                                    </div>
-                                    <div className="d-flex">
-                                        <strong>설명:</strong>
-                                        <span className="fw-lighter ms-2">{focusedParam.description}</span>
+                                    <div className="fw-lighter d-flex align-items-end my-2">
+                                        <span className="fs-4 px-3 ms-2">{focusedParam.name}</span>
+                                        <span className="ms-2">{focusedParam.description}</span>
                                     </div>
                                     <ChartControl parameter={focusedParam}/>
                                 </>
