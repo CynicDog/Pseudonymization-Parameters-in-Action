@@ -18,14 +18,14 @@ const Histogram = ({ data }) => {
         const incomeData = data.data || data;
 
         const margin = { top: 10, right: 30, bottom: 45, left: 40 };
-        const width = svgRef.current.clientWidth - margin.left - margin.right;
+        const width = svgRef.current.clientWidth - margin.left - margin.right; // Get width from the parent container
         const height = 400 - margin.top - margin.bottom;
 
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
 
         const x = d3.scaleLinear()
-            .domain([0, d3.max(incomeData)])
+            .domain([d3.min(incomeData) - 100, d3.max(incomeData) + 100])
             .range([0, width]);
 
         const histogram = d3.histogram()
@@ -81,7 +81,7 @@ const Histogram = ({ data }) => {
             <div className="d-flex py-3">
                 <div className="ms-auto" style={{width: "30%"}}>
                     <div>
-                        <p><strong>{focusedParam.name}</strong>: <u>{binningValue}</u></p>
+                        <p><strong>파라미터 값</strong>: <u className="fw-lighter">{binningValue}</u></p>
                         <input
                             type="range"
                             className="form-range"
