@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParameter } from "../Context.jsx";
 import * as d3 from "d3";
 
-const Histogram = ({ data }) => {
+const P13 = ({ data }) => {
     const { focusedParam, setFocusedParam } = useParameter();
     const svgRef = useRef(null);
 
@@ -25,6 +25,7 @@ const Histogram = ({ data }) => {
         // 차트의 실제 크기 계산 (뷰포트 크기에서 마진을 뺀 값)
         const width = svgRef.current.clientWidth - margin.left - margin.right;
         const height = svgRef.current.clientHeight - margin.top - margin.bottom;
+
 
         // x축 스케일 설정 (데이터 값의 최소, 최대 범위).
         // 데이터의 최소값(`d3.min(incomeData)`)부터 최대값까지의 도메인 차트의 시작점(`0`)부터 차트의 끝(`width`)까지 매핑
@@ -117,4 +118,4 @@ const Histogram = ({ data }) => {
     );
 };
 
-export default Histogram;
+export default P13;

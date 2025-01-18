@@ -1,7 +1,9 @@
 import { useParameter } from "./Context";
 import EmptyChart from "./charts/EmptyChart.jsx";
 import incomes from "../data/incomes.json";
-import Histogram from "./charts/Histogram.jsx";
+import ages from "../data/ages.json";
+import P13 from "./charts/P13.jsx";
+import P12 from "./charts/P12.jsx";
 
 const ChartControl = () => {
 
@@ -19,8 +21,8 @@ const ChartControl = () => {
         "P9": <EmptyChart data={ null } />,
         "P10": <EmptyChart data={ null } />,
         "P11": <EmptyChart data={ null } />,
-        "P12": <EmptyChart data={ null } />,
-        "P13": <Histogram data={incomes} />,
+        "P12": <P12 data={ ages } />,
+        "P13": <P13 data={ incomes } />,
     };
 
     return (
