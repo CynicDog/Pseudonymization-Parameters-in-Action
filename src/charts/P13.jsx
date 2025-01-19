@@ -82,7 +82,7 @@ const P13 = ({ data }) => {
             .style("text-anchor", "middle")
             .style("font-weight", "bold")
             .style("font-size", "14px")
-            .text("Count");
+            .text("Frequency");
 
         // 히스토그램 막대(rectangles) 그리기
         // 각 막대는 bin 데이터를 기반으로 렌더링
