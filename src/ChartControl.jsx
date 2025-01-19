@@ -6,6 +6,7 @@ import people from "../data/people.json";
 import P13 from "./charts/P13.jsx";
 import P12 from "./charts/P12.jsx";
 import P7 from "./charts/P7.jsx";
+import P8 from "./charts/P8.jsx";
 
 const ChartControl = () => {
 
@@ -19,7 +20,7 @@ const ChartControl = () => {
         "P5": <EmptyChart data={ null } />,
         "P6": <EmptyChart data={ null } />,
         "P7": <P7 data={ people } />,
-        "P8": <EmptyChart data={ null } />,
+        "P8": <P8 data={ people } />,
         "P9": <EmptyChart data={ null } />,
         "P10": <EmptyChart data={ null } />,
         "P11": <EmptyChart data={ null } />,

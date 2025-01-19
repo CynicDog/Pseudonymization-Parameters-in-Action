@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { applyMasking } from "../util.js";
 
-const P7 = ({ data }) => {
+const P8 = ({ data }) => {
     const [specifier, setSpecifier] = useState('/\\d{4}/');
     const [replacement, setReplacement] = useState('*');
     const [targetField, setTargetField] = useState('phone_number');
@@ -21,24 +21,27 @@ const P7 = ({ data }) => {
         } else {
             setSpecifier('-3');
         }
+
+        setReplacement("*");
     };
 
     return (
         <>
             <div className="d-flex justify-content-center align-items-center flex-row pb-4" style={{marginTop: "80px"}}>
-                <span className="fs-5 fw-lighter text-secondary me-1">대체문자</span>
+                <span className="fs-5 fw-lighter text-secondary me-1">범위지정</span>
                 "
-                <code className="text-secondary bg-secondary-subtle rounded-2 px-1">{replacement}</code>
+                <code className="text-secondary bg-secondary-subtle rounded-2 px-1">{specifier}</code>
                 "
                 <span className="mx-2">&</span>
-                <span className="fs-4 fw-light mx-2">범위지정</span>
+                <span className="fs-4 fw-light mx-2">대체문자</span>
                 "
                 <input
                     className="border-0 rounded-2 bg-primary-subtle mx-1"
                     type="text"
-                    value={specifier}
-                    onChange={(e) => setSpecifier(e.target.value)}
-                    placeholder={specifier}
+                    value={replacement}
+                    onChange={(e) => setReplacement(e.target.value)}
+                    placeholder={replacement}
+                    maxlength="1"
                     style={{
                         width: "80px",
                         fontSize: "larger",
@@ -87,4 +90,4 @@ const P7 = ({ data }) => {
     );
 };
 
-export default P7;
+export default P8;
