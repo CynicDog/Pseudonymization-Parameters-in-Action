@@ -6,7 +6,6 @@ const P10 = ({ data }) => {
 
     // Default binning value and threshold for outliers
     const [binningValue, setBinningValue] = useState(6000);
-
     const [threshold, setThreshold] = useState(null);
     const [focusedBinCountYPosition, setFocusedBinCountYPosition] = useState(null);
 
@@ -14,7 +13,6 @@ const P10 = ({ data }) => {
         if (!binningValue || binningValue === 0) return;
 
         const incomeData = data.data;
-
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove(); // Clear previous chart
 
@@ -40,7 +38,7 @@ const P10 = ({ data }) => {
         const yAxis = svg.append("g")
             .call(d3.axisLeft(y));
 
-        // x축 레이블 추가
+        // x-axis label
         svg.append("text")
             .attr("class", "x-axis-label")
             .attr("x", width / 2)
@@ -48,7 +46,6 @@ const P10 = ({ data }) => {
             .style("text-anchor", "middle")
             .text("Income");
 
-        // x축 레이블 추가
         svg.append("text")
             .attr("class", "x-axis-label")
             .attr("x", width / 2)
@@ -60,10 +57,22 @@ const P10 = ({ data }) => {
         svg.append("text")
             .attr("class", "x-axis-label")
             .attr("x", 35)
-            .attr("y", 15)
-            .style("font-size", "20px")
+            .attr("y", 22)
+            .style("font-size", "22px")
             .style("font-weight", "lighter")
             .text(`파라미터 값: ${threshold !== null ? threshold : 0}`);
+
+        // Conditionally add the text when threshold is null
+        if (threshold === null || threshold === 0) {
+            svg.append('text')
+                .attr("x", 35)
+                .attr('y', 55)
+                .attr('dy', -10)
+                .attr('text-anchor', 'start')
+                .style('font-size', '16px')
+                .style('font-weight', 'lighter')
+                .text('파라미터 값을 설정하려면 히스토그램의 막대 또는 y축의 눈금값을 클릭하세요.');
+        }
 
         svg.append("text")
             .attr("transform", "rotate(-90)")
@@ -136,9 +145,8 @@ const P10 = ({ data }) => {
             <div style={{ marginTop: "70px" }}>
                 <svg ref={svgRef} width="100%" height="400" viewBox="0 0 760 400"></svg>
             </div>
-
             <div className="d-flex">
-                <div className="ms-auto" style={{ width: "35%" }}>
+            <div className="ms-auto" style={{ width: "35%" }}>
                     <div className="d-flex align-content-center mt-3">
                         <p className="fw-lighter me-2">카운트구간길이 조정</p>
                         <div className="mb-2">
