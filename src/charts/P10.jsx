@@ -1,15 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { useParameter } from "../Context.jsx";
 import * as d3 from "d3";
 
 const P10 = ({ data }) => {
-    const { focusedParam, setFocusedParam } = useParameter();
     const svgRef = useRef(null);
 
     // Default binning value and threshold for outliers
-    const binningValue = focusedParam.value || 6000;
+    const [binningValue, setBinningValue] = useState(6000);
 
-    const [isSorted, setIsSorted] = useState(false);
     const [threshold, setThreshold] = useState(null);
     const [focusedBinCountYPosition, setFocusedBinCountYPosition] = useState(null);
 
@@ -43,11 +40,21 @@ const P10 = ({ data }) => {
         const yAxis = svg.append("g")
             .call(d3.axisLeft(y));
 
+        // x축 레이블 추가
         svg.append("text")
             .attr("class", "x-axis-label")
             .attr("x", width / 2)
             .attr("y", height + 45)
             .style("text-anchor", "middle")
+            .text("Income");
+
+        // x축 레이블 추가
+        svg.append("text")
+            .attr("class", "x-axis-label")
+            .attr("x", width / 2)
+            .attr("y", height + 65)
+            .style("text-anchor", "middle")
+            .style("font-weight", "lighter")
             .text(`(binning size of ${binningValue})`);
 
         svg.append("text")
@@ -120,11 +127,8 @@ const P10 = ({ data }) => {
 
     // Update binning parameter
     const handleBinningChange = (event) => {
-        const newBinningValue = parseInt(event.target.value, 10);
-        setFocusedParam({
-            ...focusedParam,
-            value: newBinningValue,
-        });
+        setBinningValue(parseInt(event.target.value, 10));
+        setThreshold(0);
     };
 
     return (
@@ -134,20 +138,8 @@ const P10 = ({ data }) => {
             </div>
 
             <div className="d-flex">
-                <div className="ms-auto" style={{ width: "45%" }}>
+                <div className="ms-auto" style={{ width: "35%" }}>
                     <div className="d-flex align-content-center mt-3">
-                        <div className="form-check mx-4">
-                            <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="flexCheckDefault"
-                                checked={isSorted}
-                                onChange={() => setIsSorted((prev) => !prev)}
-                            />
-                            <label className="form-check-label" htmlFor="flexCheckDefault">
-                                <p className="fw-lighter">정렬</p>
-                            </label>
-                        </div>
                         <p className="fw-lighter me-2">카운트구간길이 조정</p>
                         <div className="mb-2">
                             <input

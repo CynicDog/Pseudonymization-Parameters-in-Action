@@ -6,8 +6,7 @@ const P13 = ({ data }) => {
     const { focusedParam, setFocusedParam } = useParameter();
     const svgRef = useRef(null);
 
-    // 기본 binning 값. 컨텍스트 변수에서 가져오거나 기본값 10000 사용
-    const binningValue = focusedParam.value || 10000;
+    const [binningValue, setBinningValue] = useState(6000);
 
     useEffect(() => {
         // binning 값이 유효하지 않으면 차트 렌더링을 중단
@@ -103,11 +102,7 @@ const P13 = ({ data }) => {
     // binning 값을 변경하는 함수
     // 사용자가 binning 슬라이더를 조작하면 호출됨
     const handleBinningChange = (event) => {
-        const newBinningValue = parseInt(event.target.value, 10);
-        setFocusedParam({
-            ...focusedParam,
-            value: newBinningValue,  // 새로운 binning 값 설정
-        });
+        setBinningValue(parseInt(event.target.value, 10));
     };
 
     return (
