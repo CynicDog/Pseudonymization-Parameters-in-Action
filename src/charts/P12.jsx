@@ -91,7 +91,7 @@ const P12 = ({ data }) => {
                 .attr("y", (d) => y(d))
                 .attr("width", x.bandwidth())
                 .attr("height", (d) => height - y(d))
-                .style("fill", "#C8102E");
+                .style("fill", "#0072B2");
         };
 
         renderHistogram(rawSvgRef, rawData, "원본 데이터", false);

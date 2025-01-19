@@ -1,16 +1,17 @@
-import {useEffect, useRef, useState} from "react";
-import {useParameter} from "../Context.jsx";
+import { useEffect, useRef, useState } from "react";
+import { useParameter } from "../Context.jsx";
 import * as d3 from "d3";
 
-const P10 = ({data}) => {
-    const {focusedParam, setFocusedParam} = useParameter();
+const P10 = ({ data }) => {
+    const { focusedParam, setFocusedParam } = useParameter();
     const svgRef = useRef(null);
 
     // Default binning value and threshold for outliers
     const binningValue = focusedParam.value || 6000;
 
-    const [isSorted, setIsSorted] = useState(false); // Sort state
+    const [isSorted, setIsSorted] = useState(false);
     const [threshold, setThreshold] = useState(null);
+    const [focusedBinCountYPosition, setFocusedBinCountYPosition] = useState(null);
 
     useEffect(() => {
         if (!binningValue || binningValue === 0) return;
@@ -20,7 +21,7 @@ const P10 = ({data}) => {
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove(); // Clear previous chart
 
-        const margin = {top: 10, right: 30, bottom: 65, left: 40};
+        const margin = { top: 10, right: 30, bottom: 65, left: 40 };
         const width = svgRef.current.clientWidth - margin.left - margin.right;
         const height = svgRef.current.clientHeight - margin.top - margin.bottom;
 
@@ -29,18 +30,17 @@ const P10 = ({data}) => {
             .range([0, width]);
 
         const bins = d3.bin()
-            .thresholds(x.ticks(Math.ceil(d3.max(incomeData) / binningValue)))
-            (incomeData);
+            .thresholds(x.ticks(Math.ceil(d3.max(incomeData) / binningValue)))(incomeData);
 
         const y = d3.scaleLinear()
-            .domain([0, d3.max(bins, d => d.length)])
+            .domain([0, d3.max(bins, (d) => d.length)])
             .range([height, 0]);
 
-        // Append axes
         svg.append("g")
             .attr("transform", `translate(0,${height})`)
             .call(d3.axisBottom(x));
-        svg.append("g")
+
+        const yAxis = svg.append("g")
             .call(d3.axisLeft(y));
 
         svg.append("text")
@@ -66,22 +66,57 @@ const P10 = ({data}) => {
             .style("font-weight", "bold")
             .text("Count");
 
-        // Add bars
         svg.selectAll(".bar")
             .data(bins)
             .enter()
             .append("rect")
             .attr("class", "bar")
-            .attr("x", d => x(d.x0) + 1)
-            .attr("y", d => y(d.length))
-            .attr("width", d => Math.max(0, x(d.x1) - x(d.x0) - 1))
-            .attr("height", d => height - y(d.length))
-            .style("fill", d => threshold !== null && d.length <= threshold ? "#D55E00" : "#0072B2")
+            .attr("x", (d) => x(d.x0) + 1)
+            .attr("y", (d) => y(d.length))
+            .attr("width", (d) => Math.max(0, x(d.x1) - x(d.x0) - 1))
+            .attr("height", (d) => height - y(d.length))
+            .style("fill", (d) => (threshold !== null && d.length <= threshold ? "#D55E00" : "#0072B2"))
             .style("cursor", "pointer")
             .on("click", (event, d) => {
-                setThreshold(d.length); // Set threshold to the clicked bin's count
+                setThreshold(d.length); // Set threshold when clicking on a bar
+            })
+            .on("mouseenter", function (event, d) {
+                setFocusedBinCountYPosition(y(d.length));
+            })
+            .on("mouseleave", () => {
+                setFocusedBinCountYPosition(null);
             });
-    }, [data, binningValue, threshold]);
+
+        // Add event listener for mouseenter and click on y-axis ticks
+        yAxis.selectAll(".tick")
+            .on("mouseenter", function (event, d) {
+                // On mouse enter, display the dashed line at the tick position
+                setFocusedBinCountYPosition(y(d)); // Set the position based on the tick
+            })
+            .on("mouseleave", function () {
+                // On mouse leave, remove the dashed line
+                setFocusedBinCountYPosition(null);
+            })
+            .on("click", function (event, d) {
+                // On click, set the threshold to the y value of the clicked tick
+                setThreshold(d);
+            })
+            .style("cursor", "pointer") // Change cursor to pointer when hovering over the tick
+            .style("font-size", "14px"); // Set font size for ticks
+
+        // Add dashed line for focusedBinCountYPosition if it is not null
+        if (focusedBinCountYPosition !== null) {
+            svg.selectAll(".dashed-line").remove(); // Remove any existing dashed line
+            svg.append("line")
+                .attr("class", "dashed-line")
+                .attr("x1", 0)
+                .attr("x2", width)
+                .attr("y1", focusedBinCountYPosition)
+                .attr("y2", focusedBinCountYPosition)
+                .attr("stroke", "gray")
+                .attr("stroke-dasharray", "5,7");
+        }
+    }, [data, binningValue, threshold, focusedBinCountYPosition]);
 
     // Update binning parameter
     const handleBinningChange = (event) => {
@@ -94,12 +129,12 @@ const P10 = ({data}) => {
 
     return (
         <div>
-            <div style={{marginTop: "70px"}}>
+            <div style={{ marginTop: "70px" }}>
                 <svg ref={svgRef} width="100%" height="400" viewBox="0 0 760 400"></svg>
             </div>
 
             <div className="d-flex">
-                <div className="ms-auto" style={{width: "45%"}}>
+                <div className="ms-auto" style={{ width: "45%" }}>
                     <div className="d-flex align-content-center mt-3">
                         <div className="form-check mx-4">
                             <input
