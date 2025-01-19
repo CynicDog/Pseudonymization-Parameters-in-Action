@@ -96,7 +96,7 @@ const P13 = ({ data }) => {
             .attr("y", d => y(d.length))  // 막대의 y축 시작 위치
             .attr("width", d => Math.max(0, x(d.x1) - x(d.x0) - 1))  // 막대의 너비 설정
             .attr("height", d => height - y(d.length))  // 막대의 높이 설정
-            .style("fill", "#C8102E");  // 막대 색상 설정
+            .style("fill", "#0072B2");  // 막대 색상 설정
 
     }, [data, binningValue]);  // 데이터나 binning 값이 변경될 때마다 차트가 다시 렌더링
 
