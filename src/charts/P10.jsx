@@ -69,7 +69,7 @@ const P10 = ({ data }) => {
                 .attr('y', 55)
                 .attr('dy', -10)
                 .attr('text-anchor', 'start')
-                .style('font-size', '16px')
+                .style('font-size', '15px')
                 .style('font-weight', 'lighter')
                 .text('파라미터 값을 설정하려면 히스토그램의 막대 또는 y축의 눈금값을 클릭하세요.');
         }
