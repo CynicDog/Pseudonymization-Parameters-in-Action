@@ -180,7 +180,7 @@ const P9 = ({ data }) => {
             <div className="d-flex">
                 <div className="ms-auto mt-3" style={{width: "30%"}}>
                     <div className="d-flex ">
-                        <p className="fs-4 fw-lighter me-4">파라미터 </p>
+                        <p className="fs-4 fw-lighter me-4">임계기준 </p>
                         <div className="my-1">
                             <select
                                 className="form-select form-select-sm"
