@@ -7,7 +7,7 @@ const P10 = ({ data }) => {
     // Default binning value and threshold for outliers
     const [binningValue, setBinningValue] = useState(6000);
     const [threshold, setThreshold] = useState(null);
-    const [focusedBinCountYPosition, setFocusedBinCountYPosition] = useState(null);
+    const [focusedBinFrequencyYPosition, setFocusedBinFrequencyYPosition] = useState(null);
 
     useEffect(() => {
         if (!binningValue || binningValue === 0) return;
@@ -60,7 +60,7 @@ const P10 = ({ data }) => {
             .attr("y", 22)
             .style("font-size", "22px")
             .style("font-weight", "lighter")
-            .text(`파라미터 값: ${threshold !== null ? threshold : 0}`);
+            .text(`Threshold: ${threshold !== null ? threshold : 0}`);
 
         // Conditionally add the text when threshold is null
         if (threshold === null || threshold === 0) {
@@ -71,7 +71,7 @@ const P10 = ({ data }) => {
                 .attr('text-anchor', 'start')
                 .style('font-size', '15px')
                 .style('font-weight', 'lighter')
-                .text('파라미터 값을 설정하려면 히스토그램의 막대 또는 y축의 눈금값을 클릭하세요.');
+                .text('Click a bar or y-axis tick to set the threshold.');
         }
 
         svg.append("text")
@@ -80,7 +80,7 @@ const P10 = ({ data }) => {
             .attr("x", 0 - height / 2)
             .style("text-anchor", "middle")
             .style("font-weight", "bold")
-            .text("Count");
+            .text("Frequency");
 
         svg.selectAll(".bar")
             .data(bins)
@@ -97,21 +97,21 @@ const P10 = ({ data }) => {
                 setThreshold(d.length); // Set threshold when clicking on a bar
             })
             .on("mouseenter", function (event, d) {
-                setFocusedBinCountYPosition(y(d.length));
+                setFocusedBinFrequencyYPosition(y(d.length));
             })
             .on("mouseleave", () => {
-                setFocusedBinCountYPosition(null);
+                setFocusedBinFrequencyYPosition(null);
             });
 
         // Add event listener for mouseenter and click on y-axis ticks
         yAxis.selectAll(".tick")
             .on("mouseenter", function (event, d) {
                 // On mouse enter, display the dashed line at the tick position
-                setFocusedBinCountYPosition(y(d)); // Set the position based on the tick
+                setFocusedBinFrequencyYPosition(y(d)); // Set the position based on the tick
             })
             .on("mouseleave", function () {
                 // On mouse leave, remove the dashed line
-                setFocusedBinCountYPosition(null);
+                setFocusedBinFrequencyYPosition(null);
             })
             .on("click", function (event, d) {
                 // On click, set the threshold to the y value of the clicked tick
@@ -120,19 +120,19 @@ const P10 = ({ data }) => {
             .style("cursor", "pointer") // Change cursor to pointer when hovering over the tick
             .style("font-size", "14px"); // Set font size for ticks
 
-        // Add dashed line for focusedBinCountYPosition if it is not null
-        if (focusedBinCountYPosition !== null) {
+        // Add dashed line for focusedBinFrequencyYPosition if it is not null
+        if (focusedBinFrequencyYPosition !== null) {
             svg.selectAll(".dashed-line").remove(); // Remove any existing dashed line
             svg.append("line")
                 .attr("class", "dashed-line")
                 .attr("x1", 0)
                 .attr("x2", width)
-                .attr("y1", focusedBinCountYPosition)
-                .attr("y2", focusedBinCountYPosition)
+                .attr("y1", focusedBinFrequencyYPosition)
+                .attr("y2", focusedBinFrequencyYPosition)
                 .attr("stroke", "gray")
                 .attr("stroke-dasharray", "5,7");
         }
-    }, [data, binningValue, threshold, focusedBinCountYPosition]);
+    }, [data, binningValue, threshold, focusedBinFrequencyYPosition]);
 
     // Update binning parameter
     const handleBinningChange = (event) => {

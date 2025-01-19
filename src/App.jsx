@@ -1,10 +1,12 @@
-// App.jsx
 import {useParameter} from "./Context";
 import parameters from "../data/parameters.json";
 import ChartControl from "./ChartControl.jsx";
 
 const App = () => {
     const {focusedParam, setFocusedParam} = useParameter();
+
+    // Sort the parameters by the order value
+    const sortedParameters = parameters.data.sort((a, b) => a.order - b.order);
 
     return (
         <div className="container">
@@ -14,7 +16,7 @@ const App = () => {
                     <div className="border rounded-3 shadow p-3">
                         <span className="fs-2 fw-lighter">Parameters</span>
                         <div>
-                        {parameters.data.map((param, index) => (
+                            {sortedParameters.map((param, index) => (
                                 <div
                                     key={index}
                                     className={`my-1 ${
