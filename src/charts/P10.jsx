@@ -5,7 +5,7 @@ const P10 = ({ data }) => {
     const svgRef = useRef(null);
 
     // Default binning value and threshold for outliers
-    const [binningValue, setBinningValue] = useState(6000);
+    const binningValue = 1000;
     const [threshold, setThreshold] = useState(null);
     const [focusedBinFrequencyYPosition, setFocusedBinFrequencyYPosition] = useState(null);
 
@@ -31,9 +31,13 @@ const P10 = ({ data }) => {
             .domain([0, d3.max(bins, (d) => d.length)])
             .range([height, 0]);
 
+        let tickValues = x.ticks();
+        if (tickValues[0] > 10000) {
+            tickValues = [10000, ...tickValues];
+        }
         svg.append("g")
-            .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(x));
+            .attr("transform", `translate(0 ,${height})`)
+            .call(d3.axisBottom(x).tickValues(tickValues));
 
         const yAxis = svg.append("g")
             .call(d3.axisLeft(y));
@@ -60,7 +64,7 @@ const P10 = ({ data }) => {
             .attr("y", 22)
             .style("font-size", "22px")
             .style("font-weight", "lighter")
-            .text(`Threshold: ${threshold !== null ? threshold : 0}`);
+            .text(`파라미터 값: ${threshold !== null ? threshold : 0}`);
 
         // Conditionally add the text when threshold is null
         if (threshold === null || threshold === 0) {
@@ -71,7 +75,7 @@ const P10 = ({ data }) => {
                 .attr('text-anchor', 'start')
                 .style('font-size', '15px')
                 .style('font-weight', 'lighter')
-                .text('Click a bar or y-axis tick to set the threshold.');
+                .text('파라미터 값을 설정하려면 히스토그램의 막대 또는 y축의 눈금값을 클릭하세요.');
         }
 
         svg.append("text")
@@ -133,36 +137,10 @@ const P10 = ({ data }) => {
                 .attr("stroke-dasharray", "5,7");
         }
     }, [data, binningValue, threshold, focusedBinFrequencyYPosition]);
-
-    // Update binning parameter
-    const handleBinningChange = (event) => {
-        setBinningValue(parseInt(event.target.value, 10));
-        setThreshold(0);
-    };
-
     return (
         <div>
             <div style={{ marginTop: "70px" }}>
                 <svg ref={svgRef} width="100%" height="400" viewBox="0 0 760 400"></svg>
-            </div>
-            <div className="d-flex">
-            <div className="ms-auto" style={{ width: "35%" }}>
-                    <div className="d-flex align-content-center mt-3">
-                        <p className="fw-lighter me-2">카운트구간길이 조정</p>
-                        <div className="mb-2">
-                            <input
-                                type="range"
-                                className="form-range"
-                                id="input-range"
-                                min="1000"
-                                max="20000"
-                                step="1000"
-                                value={binningValue}
-                                onChange={handleBinningChange}
-                            />
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     );

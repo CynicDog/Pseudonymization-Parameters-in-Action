@@ -6,7 +6,7 @@ const P13 = ({ data }) => {
     const { focusedParam, setFocusedParam } = useParameter();
     const svgRef = useRef(null);
 
-    const [binningValue, setBinningValue] = useState(6000);
+    const [binningValue, setBinningValue] = useState(1000);
 
     useEffect(() => {
         // binning 값이 유효하지 않으면 차트 렌더링을 중단
@@ -28,7 +28,7 @@ const P13 = ({ data }) => {
         // x축 스케일 설정 (데이터 값의 최소, 최대 범위).
         // 데이터의 최소값(`d3.min(incomeData)`)부터 최대값까지의 도메인 차트의 시작점(`0`)부터 차트의 끝(`width`)까지 매핑
         const x = d3.scaleLinear()
-            .domain([d3.min(incomeData) - 100, d3.max(incomeData) + 100]) // 입력 도메인 설정
+            .domain([d3.min(incomeData), d3.max(incomeData)]) // 입력 도메인 설정
             .range([0, width]);  // 출력 범위 설정 (픽셀 값)
 
         // 데이터를 bins로 변환. 각 bin은 아래를 포함:
@@ -47,9 +47,13 @@ const P13 = ({ data }) => {
             .range([height, 0]);  // y축의 출력 범위 (픽셀 값)
 
         // x축 생성 및 그리기
+        let tickValues = x.ticks();
+        if (tickValues[0] > 10000) {
+            tickValues = [10000, ...tickValues];
+        }
         svg.append("g")
-            .attr("transform", `translate(0,${height})`)  // x축 위치 설정
-            .call(d3.axisBottom(x));  // x축 그리기
+            .attr("transform", `translate(0 ,${height})`)
+            .call(d3.axisBottom(x).tickValues(tickValues));
 
         // y축 생성 및 그리기
         svg.append("g")
@@ -108,10 +112,10 @@ const P13 = ({ data }) => {
     return (
         <div>
             <div className="d-flex py-3">
-                <div className="ms-auto" style={{width: "30%"}}>
+                <div className="ms-auto" style={{width: "35%"}}>
                     <div className="d-flex align-content-center mt-3">
-                        <p className="me-3"><strong>파라미터 조정</strong>{' '}</p>
-                        <div className="mb-2">
+                        <p className="me-3"><span className="fw-lighter fs-5">파라미터 조정</span>{' '}</p>
+                        <div className="mb-2 mt-1">
                             <input
                                 type="range"
                                 className="form-range"
