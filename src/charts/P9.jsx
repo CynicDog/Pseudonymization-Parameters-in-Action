@@ -152,8 +152,8 @@ const P9 = ({ data }) => {
             <div className="d-flex">
                 <div className="ms-auto mt-3" style={{width: "35%"}}>
                     <div className="d-flex ">
-                        <p className="fs-4 fw-lighter me-3">파라미터 조정 </p>
-                        <div className="my-1">
+                        <p className="fs-5 fw-lighter me-3">파라미터 조정 </p>
+                        <div>
                             <select
                                 className="form-select form-select-sm"
                                 value={standard}
