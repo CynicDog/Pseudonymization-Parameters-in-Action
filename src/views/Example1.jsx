@@ -1,15 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import * as d3 from "d3";
 
-const Example1 = ({ data }) => {
+const Example1 = ({data}) => {
     const svgRef = useRef(null);
     const tableBodyRef = useRef(null);
 
     const [binningValue, setBinningValue] = useState(1000);
-    const [threshold, setThreshold] = useState(null);
+
     const [standard, setStandard] = useState("frequency");
+
+    const [threshold, setThreshold] = useState(null);
     const [focusedBinFrequencyYPosition, setFocusedBinFrequencyYPosition] = useState(null);
+
     const [tableData, setTableData] = useState([]);
+    const [focusedTableRow, setFocusedTableRow] = useState(null);
 
     useEffect(() => {
         if (!binningValue || binningValue === 0) return;
@@ -18,7 +22,7 @@ const Example1 = ({ data }) => {
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove(); // Clear previous chart
 
-        const margin = { top: 10, right: 10, bottom: 65, left: 40 };
+        const margin = {top: 10, right: 10, bottom: 65, left: 40};
         const width = svgRef.current.clientWidth - margin.left - margin.right;
         const height = svgRef.current.clientHeight - margin.top - margin.bottom;
 
@@ -33,16 +37,27 @@ const Example1 = ({ data }) => {
             .bin()
             .thresholds(x.ticks(Math.ceil(d3.max(incomeData) / binningValue)))(incomeData);
 
+        setFocusedTableRow(null);
+
         const newTableData = bins
             .map((bin) => {
                 const frequency = bin.length;
-                const percentage = ((frequency / totalDataFrequency) * 100).toFixed(2);
+                const percentage = ((frequency / totalDataFrequency) * 100);
                 const valueRange = `${bin.x0}-${bin.x1}`;
-                return { valueRange, frequency, percentage };
+                return {valueRange, frequency, percentage};
             })
-            .filter((row) => row.frequency > 0); // Exclude zero-frequency bins
+            // Exclude zero-frequency bins
+            .filter((row) => row.frequency > 0)
+            // De-duplicate entries of the same frequencies
+            .reduce((unique, item) => {
+                const exists = unique.some(
+                    (u) => u.frequency === item.frequency && u.percentage === item.percentage
+                );
+                if (!exists) unique.push(item);
+                return unique;
+            }, []);
 
-        setTableData(newTableData.sort((a, b) => b.frequency - a.frequency));
+        setTableData(newTableData.sort((a, b) => a.frequency - b.frequency));
 
         const yMax =
             standard === "frequency"
@@ -50,6 +65,15 @@ const Example1 = ({ data }) => {
                 : d3.max(bins, (d) => (d.length / totalDataFrequency) * 100);
 
         const y = d3.scaleLinear().domain([0, yMax]).range([height, 0]);
+
+        if (focusedTableRow) {
+            setFocusedBinFrequencyYPosition(
+                y(standard === "frequency" ? focusedTableRow.frequency : focusedTableRow.percentage)
+            );
+
+            const newThreshold = standard === "frequency" ? focusedTableRow.frequency : parseFloat(focusedTableRow.percentage);
+            setThreshold(newThreshold);
+        }
 
         let tickValues = x.ticks();
         if (tickValues[0] > 10000) {
@@ -181,16 +205,16 @@ const Example1 = ({ data }) => {
         } else {
             svg.selectAll(".dashed-line").remove();
         }
-    }, [data, binningValue, threshold, standard, focusedBinFrequencyYPosition]);
+    }, [data, binningValue, threshold, standard, focusedBinFrequencyYPosition, focusedTableRow]);
 
     useEffect(() => {
         if (tableBodyRef.current) {
             const rows = tableBodyRef.current.querySelectorAll("tr");
-            const firstColoredRow = Array.from(rows).find(
+            const firstColoredRow = Array.from(rows).findLast(
                 (row) => row.classList.contains("table-warning")
             );
             if (firstColoredRow) {
-                firstColoredRow.scrollIntoView({ behavior: "smooth", block: "start" });
+                firstColoredRow.scrollIntoView({behavior: "smooth", block: "start"});
             }
         }
     }, [threshold, standard]); // Scroll when threshold or standard changes
@@ -203,12 +227,6 @@ const Example1 = ({ data }) => {
     const handleStandardChange = (event) => {
         setStandard(event.target.value);
         setThreshold(null);
-    };
-
-    const handleTableRowClick = (row) => {
-        const newThreshold = standard === "frequency" ? row.frequency : parseFloat(row.percentage);
-        setThreshold(newThreshold);
-        tableBodyRef.current.scrollTop = tableBodyRef.current.querySelector(`.row-${row.valueRange}`).offsetTop;
     };
 
     return (
@@ -232,14 +250,14 @@ const Example1 = ({ data }) => {
                     {/* Frequency Histogram */}
                     <div className="col-9">
                         <div className="d-flex mt-3">
-                            <div className="ms-auto" style={{ width: "30%" }}>
+                            <div className="ms-auto" style={{width: "30%"}}>
                                 <div className="d-flex">
                                     <p className="fs-5 fw-lighter me-3">임계기준</p>
                                     <select
                                         className="form-select form-select-sm"
                                         value={standard}
                                         onChange={handleStandardChange}
-                                        style={{ height: "30px", width: "120px" }}
+                                        style={{height: "30px", width: "120px"}}
                                     >
                                         <option value="frequency">건수</option>
                                         <option value="percentage">비율</option>
@@ -247,11 +265,11 @@ const Example1 = ({ data }) => {
                                 </div>
                             </div>
                         </div>
-                        <div style={{ marginTop: "30px", width: "100%" }}>
+                        <div style={{marginTop: "30px", width: "100%"}}>
                             <svg ref={svgRef} width="100%" height="400" viewBox="0 0 750 400"></svg>
                         </div>
                         <div className="d-flex">
-                            <div className="ms-auto" style={{ width: "30%" }}>
+                            <div className="ms-auto" style={{width: "30%"}}>
                                 <div className="d-flex align-content-center">
                                     <p className="fw-lighter me-2">카운트구간길이 조정</p>
                                     <div>
@@ -274,13 +292,10 @@ const Example1 = ({ data }) => {
                     <div className="col-3 border rounded-3 shadow-sm p-3">
                         {/* Table Header */}
                         <div className="row">
-                            <div className="col">
-                                <strong>Value</strong>
-                            </div>
-                            <div className="col">
+                            <div className="col-4">
                                 <strong>Frequency</strong>
                             </div>
-                            <div className="col">
+                            <div className="col-8">
                                 <strong>Percentage</strong>
                             </div>
                         </div>
@@ -299,7 +314,7 @@ const Example1 = ({ data }) => {
                         >
                             <table
                                 className="table table-sm"
-                                style={{ width: "100%", borderCollapse: "collapse", marginBottom: 0 }}
+                                style={{width: "100%", borderCollapse: "collapse", marginBottom: 0}}
                             >
                                 <tbody>
                                 {tableData.map((row, index) => (
@@ -314,11 +329,14 @@ const Example1 = ({ data }) => {
                                                     ? "table-warning"
                                                     : "table-primary"
                                         }
-                                        onClick={() => handleTableRowClick(row)}
+                                        onClick={() => setFocusedTableRow(row)}
                                     >
-                                        <td style={{ padding: "8px", fontSize: "14px" }}>{row.valueRange}</td>
-                                        <td style={{ padding: "8px", fontSize: "14px" }}>{row.frequency}</td>
-                                        <td style={{ padding: "8px", fontSize: "14px" }}>{row.percentage}%</td>
+                                        <td style={{padding: "10px", fontSize: "14px"}}>{row.frequency}</td>
+                                        <td style={{
+                                            padding: "8px",
+                                            fontSize: "14px"
+                                        }}>{parseFloat(row.percentage).toFixed(4)}%
+                                        </td>
                                     </tr>
                                 ))}
                                 </tbody>
