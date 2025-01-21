@@ -1,6 +1,6 @@
 import {HashRouter as Router, Route, Routes} from "react-router-dom";
 import Description from "./views/Description.jsx";
-import Example1 from "./views/Example1.jsx";
+import Example1 from "./charts/Example1.jsx";
 import incomes from "../data/incomes.json"
 
 const App = () => {

@@ -360,25 +360,25 @@ const Example1 = ({data}) => {
                             {standard !== null && (
                                 <>
                                     <span className="badge text-bg-primary rounded-pill me-1 text-center">임계기준</span>
-                                    <span className="badge text-bg-secondary rounded-pill me-1 text-center">{standard}</span>
+                                    <span className="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill me-1 text-center">{standard}</span>
                                     ,
                                 </>
                             )}
                             {threshold !== null && (
                                 <>
                                     <span className="badge text-bg-primary rounded-pill mx-1 text-center">임계값</span>
-                                    <span className="badge text-bg-secondary rounded-pill me-1 text-center">{parseFloat(threshold).toFixed(4)}</span>
+                                    <span className="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill me-1 text-center">{parseFloat(threshold).toFixed(4)}</span>
                                     ,
                                 </>
                             )}
                             {binningValue !== null && (
                                 <>
                                     <span className="badge text-bg-primary rounded-pill mx-1 text-center">카운트구간길이</span>
-                                    <span className="badge text-bg-secondary rounded-pill text-center">{binningValue}</span>
+                                    <span className="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill text-center">{binningValue}</span>
                                 </>
                             )}
                             ) 를 활용하여
-                            <span className="badge bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill mx-1">이상치범주화</span>
+                            <span className="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill mx-1">이상치범주화</span>
                             를 적용합니다.
                         </div>
                     </div>
