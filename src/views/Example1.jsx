@@ -22,7 +22,7 @@ const Example1 = ({data}) => {
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove(); // Clear previous chart
 
-        const margin = {top: 10, right: 10, bottom: 65, left: 40};
+        const margin = {top: 10, right: 40, bottom: 65, left: 30};
         const width = svgRef.current.clientWidth - margin.left - margin.right;
         const height = svgRef.current.clientHeight - margin.top - margin.bottom;
 
@@ -57,7 +57,7 @@ const Example1 = ({data}) => {
                 return unique;
             }, []);
 
-        setTableData(newTableData.sort((a, b) => a.frequency - b.frequency));
+        setTableData(newTableData.sort((a, b) => b.frequency - a.frequency));
 
         const yMax =
             standard === "frequency"
@@ -210,7 +210,7 @@ const Example1 = ({data}) => {
     useEffect(() => {
         if (tableBodyRef.current) {
             const rows = tableBodyRef.current.querySelectorAll("tr");
-            const firstColoredRow = Array.from(rows).findLast(
+            const firstColoredRow = Array.from(rows).find(
                 (row) => row.classList.contains("table-warning")
             );
             if (firstColoredRow) {
@@ -248,7 +248,7 @@ const Example1 = ({data}) => {
                 </div>
                 <div className="row">
                     {/* Frequency Histogram */}
-                    <div className="col-9">
+                    <div className="col-11">
                         <div className="d-flex mt-3">
                             <div className="ms-auto" style={{width: "30%"}}>
                                 <div className="d-flex">
@@ -266,12 +266,12 @@ const Example1 = ({data}) => {
                             </div>
                         </div>
                         <div style={{marginTop: "30px", width: "100%"}}>
-                            <svg ref={svgRef} width="100%" height="400" viewBox="0 0 750 400"></svg>
+                            <svg ref={svgRef} width="100%" height="400" viewBox="0 0 1000 400"></svg>
                         </div>
                         <div className="d-flex">
                             <div className="ms-auto" style={{width: "30%"}}>
                                 <div className="d-flex align-content-center">
-                                    <p className="fw-lighter me-2">카운트구간길이 조정</p>
+                                    <p className="fw-lighter me-3">카운트구간길이</p>
                                     <div>
                                         <input
                                             type="range"
@@ -289,15 +289,19 @@ const Example1 = ({data}) => {
                         </div>
                     </div>
                     {/* Frequency Table */}
-                    <div className="col-3 border rounded-3 shadow-sm p-3">
+                    <div className="col-1 p-1">
                         {/* Table Header */}
                         <div className="row">
-                            <div className="col-4">
-                                <strong>Frequency</strong>
-                            </div>
-                            <div className="col-8">
-                                <strong>Percentage</strong>
-                            </div>
+                            {standard === "frequency" && (
+                                <div className="col-12">
+                                    <span>Frequency</span>
+                                </div>
+                            )}
+                            {standard === "percentage" && (
+                                <div className="col-12">
+                                    <span>Percentage</span>
+                                </div>
+                            )}
                         </div>
 
                         {/* Scrollable Table Body */}
@@ -331,12 +335,16 @@ const Example1 = ({data}) => {
                                         }
                                         onClick={() => setFocusedTableRow(row)}
                                     >
-                                        <td style={{padding: "10px", fontSize: "14px"}}>{row.frequency}</td>
-                                        <td style={{
-                                            padding: "8px",
-                                            fontSize: "14px"
-                                        }}>{parseFloat(row.percentage).toFixed(4)}%
-                                        </td>
+                                        {standard === "frequency" && (
+                                            <td style={{padding: "10px", fontSize: "12px"}}>
+                                                {row.frequency}
+                                            </td>
+                                        )}
+                                        {standard === "percentage" && (
+                                            <td style={{padding: "10px", fontSize: "12px"}}>
+                                                {parseFloat(row.percentage).toFixed(4)}%
+                                            </td>
+                                        )}
                                     </tr>
                                 ))}
                                 </tbody>
@@ -347,7 +355,8 @@ const Example1 = ({data}) => {
                 <div className="row">
                     <div className="col px-5 py-3">
                         <div className="d-flex justify-content-center align-items-center mt-4">
-                            소득 데이터를 파라미터 (
+                            <span className="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1">소득</span>
+                            데이터를 파라미터 (
                             {standard !== null && (
                                 <>
                                     <span className="badge text-bg-primary rounded-pill me-1 text-center">임계기준</span>
@@ -369,7 +378,9 @@ const Example1 = ({data}) => {
                                         className="badge text-bg-secondary rounded-pill text-center">{binningValue}</span>
                                 </>
                             )}
-                            ) 를 활용하여 이상치 범주화를 적용합니다.
+                            ) 를 활용하여
+                            <span className="badge bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill mx-1">이상치범주화</span>
+                            를 적용합니다.
                         </div>
                     </div>
                 </div>
