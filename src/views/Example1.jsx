@@ -250,7 +250,7 @@ const Example1 = ({data}) => {
                     {/* Frequency Histogram */}
                     <div className="col-11">
                         <div className="d-flex mt-3">
-                            <div className="ms-auto" style={{width: "30%"}}>
+                            <div className="ms-auto" style={{width: "25%"}}>
                                 <div className="d-flex">
                                     <p className="fs-5 fw-lighter me-3">임계기준</p>
                                     <select
