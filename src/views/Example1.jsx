@@ -360,22 +360,21 @@ const Example1 = ({data}) => {
                             {standard !== null && (
                                 <>
                                     <span className="badge text-bg-primary rounded-pill me-1 text-center">임계기준</span>
-                                    <span
-                                        className="badge text-bg-secondary rounded-pill me-3 text-center">{standard}</span>
+                                    <span className="badge text-bg-secondary rounded-pill me-1 text-center">{standard}</span>
+                                    ,
                                 </>
                             )}
                             {threshold !== null && (
                                 <>
-                                    <span className="badge text-bg-primary rounded-pill me-1 text-center">임계값</span>
-                                    <span
-                                        className="badge text-bg-secondary rounded-pill me-3 text-center">{parseFloat(threshold).toFixed(4)}</span>
+                                    <span className="badge text-bg-primary rounded-pill mx-1 text-center">임계값</span>
+                                    <span className="badge text-bg-secondary rounded-pill me-1 text-center">{parseFloat(threshold).toFixed(4)}</span>
+                                    ,
                                 </>
                             )}
                             {binningValue !== null && (
                                 <>
-                                    <span className="badge text-bg-primary rounded-pill me-1 text-center">카운트구간길이</span>
-                                    <span
-                                        className="badge text-bg-secondary rounded-pill text-center">{binningValue}</span>
+                                    <span className="badge text-bg-primary rounded-pill mx-1 text-center">카운트구간길이</span>
+                                    <span className="badge text-bg-secondary rounded-pill text-center">{binningValue}</span>
                                 </>
                             )}
                             ) 를 활용하여
