@@ -368,7 +368,7 @@ const Example1 = ({data}) => {
                                 <>
                                     <span className="badge text-bg-primary rounded-pill me-1 text-center">임계값</span>
                                     <span
-                                        className="badge text-bg-secondary rounded-pill me-3 text-center">{threshold}</span>
+                                        className="badge text-bg-secondary rounded-pill me-3 text-center">{parseFloat(threshold).toFixed(4)}</span>
                                 </>
                             )}
                             {binningValue !== null && (
