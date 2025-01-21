@@ -136,7 +136,7 @@ const Example1 = ({data}) => {
         svg
             .append("text")
             .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left)
+            .attr("y", 0 - margin.left - 7)
             .attr("x", 0 - height / 2)
             .style("text-anchor", "middle")
             .style("font-weight", "bold")
