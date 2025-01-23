@@ -11,8 +11,8 @@ const App = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<Description />} />
-                <Route path="/example-1" element={<IncomeExample data={ incomes }/>} />
-                <Route path="/example-2" element={<IncomeExample data={ incomes_2 }/>} />
+                <Route path="/example-1" element={<IncomeExample data={ incomes } defaultBinningValue={ 1000 } />} />
+                <Route path="/example-2" element={<IncomeExample data={ incomes_2 } defaultBinningValue={ 200 }/>} />
             </Routes>
         </Router>
     )

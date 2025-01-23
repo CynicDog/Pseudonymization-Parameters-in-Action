@@ -1,11 +1,11 @@
 import {useEffect, useRef, useState} from "react";
 import * as d3 from "d3";
 
-const IncomeExample = ({data}) => {
+const IncomeExample = ({ data, defaultBinningValue }) => {
     const svgRef = useRef(null);
     const tableBodyRef = useRef(null);
 
-    const [binningValue, setBinningValue] = useState(200);
+    const [binningValue, setBinningValue] = useState(defaultBinningValue);
 
     const [standard, setStandard] = useState("frequency");
 
@@ -19,6 +19,8 @@ const IncomeExample = ({data}) => {
         if (!binningValue || binningValue === 0) return;
 
         const incomeData = data.data;
+        setBinningValue(defaultBinningValue);
+
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove(); // Clear previous chart
 
@@ -205,7 +207,7 @@ const IncomeExample = ({data}) => {
         } else {
             svg.selectAll(".dashed-line").remove();
         }
-    }, [data, binningValue, threshold, standard, focusedBinFrequencyYPosition, focusedTableRow]);
+    }, [data, defaultBinningValue, binningValue, threshold, standard, focusedBinFrequencyYPosition, focusedTableRow]);
 
     useEffect(() => {
         if (tableBodyRef.current) {
@@ -277,9 +279,9 @@ const IncomeExample = ({data}) => {
                                             type="range"
                                             className="form-range"
                                             id="input-range"
-                                            min="200"
+                                            min={defaultBinningValue}
                                             max="20000"
-                                            step="100"
+                                            step={defaultBinningValue}
                                             value={binningValue}
                                             onChange={handleBinningChange}
                                         />
