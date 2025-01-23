@@ -19,7 +19,6 @@ const IncomeExample = ({ data, defaultBinningValue }) => {
         if (!binningValue || binningValue === 0) return;
 
         const incomeData = data.data;
-        setBinningValue(defaultBinningValue);
 
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove(); // Clear previous chart
@@ -207,7 +206,7 @@ const IncomeExample = ({ data, defaultBinningValue }) => {
         } else {
             svg.selectAll(".dashed-line").remove();
         }
-    }, [data, defaultBinningValue, binningValue, threshold, standard, focusedBinFrequencyYPosition, focusedTableRow]);
+    }, [data, binningValue, threshold, standard, focusedBinFrequencyYPosition, focusedTableRow]);
 
     useEffect(() => {
         if (tableBodyRef.current) {
@@ -220,6 +219,10 @@ const IncomeExample = ({ data, defaultBinningValue }) => {
             }
         }
     }, [threshold, standard]); // Scroll when threshold or standard changes
+
+    useEffect(() => {
+        setBinningValue(defaultBinningValue);
+    }, [defaultBinningValue]);
 
     const handleBinningChange = (event) => {
         setBinningValue(parseInt(event.target.value, 10));
