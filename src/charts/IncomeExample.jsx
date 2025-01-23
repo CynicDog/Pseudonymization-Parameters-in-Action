@@ -1,11 +1,11 @@
 import {useEffect, useRef, useState} from "react";
 import * as d3 from "d3";
 
-const Example1 = ({data}) => {
+const IncomeExample = ({data}) => {
     const svgRef = useRef(null);
     const tableBodyRef = useRef(null);
 
-    const [binningValue, setBinningValue] = useState(1000);
+    const [binningValue, setBinningValue] = useState(200);
 
     const [standard, setStandard] = useState("frequency");
 
@@ -22,7 +22,7 @@ const Example1 = ({data}) => {
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove(); // Clear previous chart
 
-        const margin = {top: 10, right: 40, bottom: 65, left: 30};
+        const margin = {top: 10, right: 40, bottom: 65, left: 40};
         const width = svgRef.current.clientWidth - margin.left - margin.right;
         const height = svgRef.current.clientHeight - margin.top - margin.bottom;
 
@@ -84,7 +84,7 @@ const Example1 = ({data}) => {
             .call(d3.axisBottom(x).tickValues(tickValues));
 
         const yAxis = svg.append("g").call(
-            d3.axisLeft(y).ticks(5).tickFormat((d) => (standard === "percentage" ? `${d}%` : d))
+            d3.axisLeft(y).ticks(10).tickFormat((d) => (standard === "percentage" ? `${d}%` : d))
         );
 
         svg
@@ -136,11 +136,11 @@ const Example1 = ({data}) => {
         svg
             .append("text")
             .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left - 7)
+            .attr("y", 0 - margin.left - 17)
             .attr("x", 0 - height / 2)
             .style("text-anchor", "middle")
             .style("font-weight", "bold")
-            .text(standard === "frequency" ? "Frequency" : "Percentage");
+            .text(standard === "frequency" ? "건수" : "비율");
 
         svg
             .selectAll(".bar")
@@ -266,7 +266,7 @@ const Example1 = ({data}) => {
                             </div>
                         </div>
                         <div style={{marginTop: "30px", width: "100%"}}>
-                            <svg ref={svgRef} width="100%" height="400" viewBox="0 0 1000 400"></svg>
+                            <svg ref={svgRef} width="100%" height="400" viewBox="0 0 940 400"></svg>
                         </div>
                         <div className="d-flex">
                             <div className="ms-auto" style={{width: "30%"}}>
@@ -277,9 +277,9 @@ const Example1 = ({data}) => {
                                             type="range"
                                             className="form-range"
                                             id="input-range"
-                                            min="1000"
+                                            min="200"
                                             max="20000"
-                                            step="1000"
+                                            step="100"
                                             value={binningValue}
                                             onChange={handleBinningChange}
                                         />
@@ -294,12 +294,12 @@ const Example1 = ({data}) => {
                         <div className="row">
                             {standard === "frequency" && (
                                 <div className="col-12">
-                                    <span>Frequency</span>
+                                    <span>건수</span>
                                 </div>
                             )}
                             {standard === "percentage" && (
                                 <div className="col-12">
-                                    <span>Percentage</span>
+                                    <span>비율</span>
                                 </div>
                             )}
                         </div>
@@ -360,7 +360,7 @@ const Example1 = ({data}) => {
                             {standard !== null && (
                                 <>
                                     <span className="badge text-bg-primary rounded-pill me-1 text-center">임계기준</span>
-                                    <span className="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill me-1 text-center">{standard}</span>
+                                    <span className="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill me-1 text-center">{standard === 'frequency'? "건수" : "비율"} </span>
                                     ,
                                 </>
                             )}
@@ -388,4 +388,4 @@ const Example1 = ({data}) => {
     );
 };
 
-export default Example1;
+export default IncomeExample;

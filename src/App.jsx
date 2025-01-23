@@ -1,7 +1,9 @@
 import {HashRouter as Router, Route, Routes} from "react-router-dom";
 import Description from "./views/Description.jsx";
-import Example1 from "./charts/Example1.jsx";
+import IncomeExample from "./charts/IncomeExample.jsx";
+
 import incomes from "../data/incomes.json"
+import incomes_2 from "../data/incomes_2.json"
 
 const App = () => {
 
@@ -9,7 +11,8 @@ const App = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<Description />} />
-                <Route path="/example-1" element={<Example1 data={ incomes }/>} />
+                <Route path="/example-1" element={<IncomeExample data={ incomes }/>} />
+                <Route path="/example-2" element={<IncomeExample data={ incomes_2 }/>} />
             </Routes>
         </Router>
     )
